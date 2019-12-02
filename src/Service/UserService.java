@@ -2,6 +2,8 @@ package Service;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import DAO.UserDAO;
 import model.user;
@@ -16,22 +18,21 @@ public class UserService extends BaseService<user>
 		super(userDAO);
 	}
 
+		
 	/**
 	 * 用户进行登录的业务
-	 * 
-	 * @param username 用户名
-	 * @param password 密码
+	 * @param model 用户的bean对象
 	 * @return 如果业务正确则返回 "true" 如果错误则返回错误提示信息
 	 */
-	public String Login(String username, String password)
+	public String Login(user model)
 	{
 		try
 		{
 
-			ResultSet result = Read("select * from user where username='" + username + "'");
+			ResultSet result = Read("select * from user where username='" + model.getUsername() + "'");
 			if (result.next())
 			{
-				if (password.equals(result.getString("password")))
+				if (model.getPassword().equals(result.getString("password")))
 				{
 					return "true";
 				} 
@@ -55,14 +56,18 @@ public class UserService extends BaseService<user>
 
 	}
 
-	
-	public String Register(String username, String password)
+	/**
+	 *  用户进行注册的业务
+	 * @param model 用户的bean对象
+	 * @return 如果业务正确则返回 "true" 如果错误则返回错误提示信息
+	 */
+	public String Register(user model)
 	{
 		
 		
 		try
 		{
-			ResultSet result=Read("select * from user where username='"+username+"'");
+			ResultSet result=Read("select * from user where username='"+model.getUsername()+"'");
 			if (result.next())
 			{
 				System.out.println("该账户已经存在！！");
@@ -71,7 +76,7 @@ public class UserService extends BaseService<user>
 			
 			else
 			{
-				Create("insert into user (username,password) value('"+username+"','"+password+"')");
+				Create("insert into user (username,password) value('"+model.getUsername()+"','"+model.getPassword()+"')");
 				return "true";
 			}
 			
@@ -87,6 +92,33 @@ public class UserService extends BaseService<user>
 		
 	}
 	
+	/**
+	 *  将查询到的Result转换成List
+	 * @param ResultSet 查询返回的ResultSet类型
+	 * @return 返回user泛型的List usermodel
+	 */
+	public List<user> ResultToList(ResultSet ResultSet)
+	{
 	
-	
+			List<user> usermodel = new ArrayList<user>();
+			try
+			{
+				while (ResultSet.next())
+				{
+					user currentUser = new user();
+					currentUser.setUsername(ResultSet.getString("username"));
+					currentUser.setPassword(ResultSet.getString("password"));
+					usermodel.add(currentUser);
+				}
+			}
+			catch (SQLException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			return usermodel;
+
+
+	}
 }

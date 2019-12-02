@@ -6,6 +6,7 @@ import model.BaseModel;
 
 public class BaseService<T extends BaseModel>
 {
+	//不用ORM其实可以不用泛型
 	private BaseDAO<T> _baseDAO;
 	
 	 public BaseService(BaseDAO<T> baseDAO)
@@ -49,8 +50,6 @@ public class BaseService<T extends BaseModel>
 		_baseDAO.Delete(sql);
 
 	}
-	
-
 	
 
 }

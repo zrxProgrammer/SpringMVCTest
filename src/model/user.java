@@ -2,18 +2,19 @@ package model;
 
 public class user extends BaseModel
 {
-	private String name;
+	private String username;
 	private String password;
-
-	public String getName()
+	
+	public String getUsername()
 	{
-		return name;
+		return username;
 	}
 
-	public void setName(String name)
+	public void setUsername(String username)
 	{
-		this.name = name;
+		this.username = username;
 	}
+
 
 	public String getPassword()
 	{
