@@ -23,7 +23,7 @@ public class HomeController
 		ResultSet result = userService.Read("select * from user");
 
 		//增加代码可读性 
-		List<user> usermodel=userService.ResultToList(result);
+		List<user> usermodel=userService.ResultsetToList(result);
 		
 		ModelAndView View = new ModelAndView();
 		View.addObject("userDataList", usermodel);

@@ -97,7 +97,7 @@ public class UserService extends BaseService<user>
 	 * @param ResultSet 查询返回的ResultSet类型
 	 * @return 返回user泛型的List usermodel
 	 */
-	public List<user> ResultToList(ResultSet ResultSet)
+	public List<user> ResultsetToList(ResultSet ResultSet)
 	{
 	
 			List<user> usermodel = new ArrayList<user>();
