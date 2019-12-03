@@ -63,14 +63,12 @@ public class UserService extends BaseService<user>
 	 */
 	public String Register(user model)
 	{
-		
-		
+			
 		try
 		{
 			ResultSet result=Read("select * from user where username='"+model.getUsername()+"'");
 			if (result.next())
 			{
-				System.out.println("该账户已经存在！！");
 				return "该账户已经存在！！";
 			}
 			
@@ -79,18 +77,57 @@ public class UserService extends BaseService<user>
 				Create("insert into user (username,password) value('"+model.getUsername()+"','"+model.getPassword()+"')");
 				return "true";
 			}
-			
-			
+						
 		} 
 		
 		catch (SQLException e)
 		{
-				System.out.println("反正有错误！！(可能是result.next()为false)");
 			e.printStackTrace();
 			return "反正有错误！！(可能是result.next()为false)";
 		}
 		
 	}
+	
+	/**
+	 * 修改密码的业务
+	 * @param username 用户名
+	 * @param OldPassword 原密码
+	 * @param NewPassowrd 新密码
+	 * @param ReNewPassword 重复新密码
+	 * @return
+	 */
+	public String UpdatePwd(String username,String OldPassword,String NewPassowrd,String ReNewPassword) 
+	{
+		ResultSet result=Read("select * from user where username='"+username+"'");
+		try
+		{
+			if (result.next())
+			{
+				if (result.getString("password").equals(OldPassword))
+				{
+					if (!OldPassword.equals(NewPassowrd))
+					{
+						if (NewPassowrd.equals(ReNewPassword))
+						{
+							Update("update user set password='"+NewPassowrd+"' where username='"+username+"'");
+							return "true";
+						}
+					}
+				}
+			}
+		}
+		catch (SQLException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return "false";
+		
+	}
+	
+	
+	
 	
 	/**
 	 *  将查询到的Result转换成List
@@ -108,6 +145,7 @@ public class UserService extends BaseService<user>
 					user currentUser = new user();
 					currentUser.setUsername(ResultSet.getString("username"));
 					currentUser.setPassword(ResultSet.getString("password"));
+					currentUser.setId(ResultSet.getInt("id"));
 					usermodel.add(currentUser);
 				}
 			}
